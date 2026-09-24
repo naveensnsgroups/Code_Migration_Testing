@@ -1,0 +1,7 @@
+/* Only base resets — all styling is pure Tailwind utility classes in components */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
