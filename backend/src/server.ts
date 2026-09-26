@@ -10,6 +10,7 @@ import mongoSanitize from 'express-mongo-sanitize';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import employeeRoutes from './routes/employeeRoutes';
+import chatRoutes from './routes/chatRoutes';
 
 // Load env vars before anything else
 dotenv.config();
@@ -63,6 +64,7 @@ app.use(express.json({ limit: '10kb' })); // reject payloads over 10kb
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
 app.use('/api/employees', employeeRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Health check
 app.get('/', (req: Request, res: Response) => {

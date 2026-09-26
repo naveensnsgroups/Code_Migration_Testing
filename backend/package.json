@@ -9,12 +9,14 @@
     "dev": "node --import tsx/esm src/server.ts"
   },
   "dependencies": {
+    "@langchain/google-genai": "^2.3.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-mongo-sanitize": "^2.2.0",
     "express-rate-limit": "^7.3.1",
     "helmet": "^7.1.0",
+    "langchain": "^1.5.12",
     "mongoose": "^8.4.1",
     "zod": "^3.23.8"
   },
