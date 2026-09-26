@@ -1,10 +1,15 @@
-const express    = require('express');
-const cors       = require('cors');
-const helmet     = require('helmet');
-const rateLimit  = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const dotenv     = require('dotenv');
-const connectDB  = require('./config/db');
+/**
+ * server.ts — Main entry point for the Personal Details App Backend.
+ * Sets up Express, security middleware, MongoDB connection, and employee routes in TypeScript.
+ */
+import express, { Request, Response, NextFunction } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import dotenv from 'dotenv';
+import connectDB from './config/db';
+import employeeRoutes from './routes/employeeRoutes';
 
 // Load env vars before anything else
 dotenv.config();
@@ -57,27 +62,25 @@ app.use(mongoSanitize());
 app.use(express.json({ limit: '10kb' })); // reject payloads over 10kb
 
 // ─── Routes ──────────────────────────────────────────────────────────────────
-app.use('/api/employees', require('./routes/employeeRoutes'));
+app.use('/api/employees', employeeRoutes);
 
 // Health check
-app.get('/', (req, res) => {
+app.get('/', (req: Request, res: Response) => {
   res.json({ success: true, message: 'Personal Details API is running.' });
 });
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 // ─── Global Error Handler ────────────────────────────────────────────────────
-// Must have 4 parameters for Express to treat it as error middleware
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
+app.use((err: any, req: Request, res: Response, next: NextFunction): any => {
   console.error(`[ERROR] ${req.method} ${req.originalUrl} —`, err.message);
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const messages = Object.values(err.errors).map((e) => e.message);
+    const messages = Object.values(err.errors).map((e: any) => e.message);
     return res.status(400).json({ success: false, message: messages.join(', ') });
   }
 
@@ -90,7 +93,7 @@ app.use((err, req, res, next) => {
   const message =
     process.env.NODE_ENV === 'production' ? 'Internal Server Error' : err.message;
 
-  res.status(statusCode).json({ success: false, message });
+  return res.status(statusCode).json({ success: false, message });
 });
 
 // ─── Start Server ─────────────────────────────────────────────────────────────

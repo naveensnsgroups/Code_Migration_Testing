@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Uses VITE_API_URL in production, fallback to '/api/employees' for local development via Vite proxy
-const BASE_URL = import.meta.env.VITE_API_URL || '/api/employees';
+// Connect directly to backend on port 5000 to avoid CORS or proxy issues on port 3000
+const BASE_URL = 'http://localhost:5000/api/employees';
 
 const api = axios.create({
   baseURL: BASE_URL,

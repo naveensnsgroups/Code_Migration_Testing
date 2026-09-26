@@ -1,0 +1,34 @@
+{
+  "apps": [
+    {
+      "name": "backend",
+      "cwd": "backend",
+      "install": "npm install",
+      "command": "npm run dev",
+      "port": 5000,
+      "env": {
+        "PORT": "5000"
+      },
+      "originalPort": 5000,
+      "originalCommand": "npm run dev",
+      "originalEnv": {
+        "PORT": "5000"
+      }
+    },
+    {
+      "name": "frontend",
+      "cwd": "frontend",
+      "install": "npm install",
+      "command": "npx vite --host 0.0.0.0 --port 3000",
+      "port": 3000,
+      "env": {
+        "PORT": "3000"
+      },
+      "originalPort": 5173,
+      "originalCommand": "npm run dev",
+      "originalEnv": {
+        "PORT": "5173"
+      }
+    }
+  ]
+}

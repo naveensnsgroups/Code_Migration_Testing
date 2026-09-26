@@ -1,4 +1,5 @@
-const { z } = require('zod');
+import { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
 
 const employeeZodSchema = z.object({
   fullName: z
@@ -38,7 +39,7 @@ const employeeZodSchema = z.object({
 /**
  * Express middleware to validate request body using Zod schema
  */
-const validateEmployeeWithZod = (req, res, next) => {
+export const validateEmployeeWithZod = (req: Request, res: Response, next: NextFunction) => {
   const result = employeeZodSchema.safeParse(req.body);
   if (!result.success) {
     const errorMessages = result.error.issues.map((issue) => issue.message);
@@ -53,4 +54,4 @@ const validateEmployeeWithZod = (req, res, next) => {
   next();
 };
 
-module.exports = validateEmployeeWithZod;
+export default validateEmployeeWithZod;

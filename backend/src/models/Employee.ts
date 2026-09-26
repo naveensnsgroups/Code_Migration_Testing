@@ -1,6 +1,21 @@
-const mongoose = require('mongoose');
+import mongoose, { Document, Schema } from 'mongoose';
 
-const employeeSchema = new mongoose.Schema(
+export interface IEmployee extends Document {
+  fullName: string;
+  employeeId: string;
+  email: string;
+  phone: string;
+  dateOfBirth?: Date;
+  gender?: 'Male' | 'Female' | 'Other';
+  address?: string;
+  department?: 'IT' | 'HR' | 'Finance' | 'Marketing' | 'Operations' | 'Sales' | 'Admin' | 'Other';
+  position?: string;
+  joinDate?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const employeeSchema = new Schema<IEmployee>(
   {
     fullName: {
       type: String,
@@ -70,4 +85,4 @@ const employeeSchema = new mongoose.Schema(
 );
 
 // Third argument explicitly sets the MongoDB collection name to 'HR'
-module.exports = mongoose.model('Employee', employeeSchema, 'HR');
+export default mongoose.model<IEmployee>('Employee', employeeSchema, 'HR');

@@ -1,13 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const validateEmployeeWithZod = require('../middleware/validateEmployee');
-const {
+import { Router } from 'express';
+import { validateEmployeeWithZod } from '../middleware/validateEmployee';
+import {
   getAllEmployees,
   getEmployeeById,
   createEmployee,
   updateEmployee,
   deleteEmployee,
-} = require('../controllers/employeeController');
+} from '../controllers/employeeController';
+
+const router = Router();
 
 router
   .route('/')
@@ -20,4 +21,4 @@ router
   .put(validateEmployeeWithZod, updateEmployee)
   .delete(deleteEmployee);
 
-module.exports = router;
+export default router;
