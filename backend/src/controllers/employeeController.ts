@@ -1,18 +1,15 @@
-const mongoose = require('mongoose');
-const Employee = require('../models/Employee');
+import { Request, Response, NextFunction } from 'express';
+import mongoose from 'mongoose';
+import Employee from '../models/Employee.js';
 
-// Whitelisted fields — only these can be set via API
 const ALLOWED_FIELDS = [
   'fullName', 'employeeId', 'email', 'phone',
   'dateOfBirth', 'gender', 'address',
   'department', 'position', 'joinDate',
 ];
 
-/**
- * Pick only allowed fields from an object (prevents mass assignment)
- */
-const pickFields = (body) => {
-  return ALLOWED_FIELDS.reduce((acc, key) => {
+const pickFields = (body: any) => {
+  return ALLOWED_FIELDS.reduce((acc: any, key) => {
     if (body[key] !== undefined && body[key] !== null) {
       if (typeof body[key] === 'string') {
         const trimmed = body[key].trim();
@@ -25,18 +22,13 @@ const pickFields = (body) => {
   }, {});
 };
 
-/**
- * Validate MongoDB ObjectId — returns false if invalid
- */
-const isValidId = (id) => mongoose.isValidObjectId(id);
+const isValidId = (id: string): boolean => mongoose.isValidObjectId(id);
 
-// @desc    Get all employees
-// @route   GET /api/employees
-const getAllEmployees = async (req, res, next) => {
+export const getAllEmployees = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const page  = Math.max(1, parseInt(req.query.page)  || 1);
-    const limit = Math.min(100, parseInt(req.query.limit) || 50);
-    const skip  = (page - 1) * limit;
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit as string) || 50);
+    const skip = (page - 1) * limit;
 
     const [employees, total] = await Promise.all([
       Employee.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
@@ -56,9 +48,7 @@ const getAllEmployees = async (req, res, next) => {
   }
 };
 
-// @desc    Get single employee
-// @route   GET /api/employees/:id
-const getEmployeeById = async (req, res, next) => {
+export const getEmployeeById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidId(req.params.id)) {
       return res.status(400).json({ success: false, message: 'Invalid employee ID format' });
@@ -75,14 +65,12 @@ const getEmployeeById = async (req, res, next) => {
   }
 };
 
-// @desc    Create new employee
-// @route   POST /api/employees
-const createEmployee = async (req, res, next) => {
+export const createEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const safeData = pickFields(req.body);
     const employee = await Employee.create(safeData);
     res.status(201).json({ success: true, message: 'Employee created successfully', data: employee });
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 11000) {
       const field = Object.keys(error.keyValue)[0];
       return res.status(409).json({ success: false, message: `${field} already exists` });
@@ -91,9 +79,7 @@ const createEmployee = async (req, res, next) => {
   }
 };
 
-// @desc    Update employee
-// @route   PUT /api/employees/:id
-const updateEmployee = async (req, res, next) => {
+export const updateEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidId(req.params.id)) {
       return res.status(400).json({ success: false, message: 'Invalid employee ID format' });
@@ -110,7 +96,7 @@ const updateEmployee = async (req, res, next) => {
     }
 
     res.status(200).json({ success: true, message: 'Employee updated successfully', data: employee });
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 11000) {
       const field = Object.keys(error.keyValue)[0];
       return res.status(409).json({ success: false, message: `${field} already exists` });
@@ -119,9 +105,7 @@ const updateEmployee = async (req, res, next) => {
   }
 };
 
-// @desc    Delete employee
-// @route   DELETE /api/employees/:id
-const deleteEmployee = async (req, res, next) => {
+export const deleteEmployee = async (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!isValidId(req.params.id)) {
       return res.status(400).json({ success: false, message: 'Invalid employee ID format' });
@@ -136,12 +120,4 @@ const deleteEmployee = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-module.exports = {
-  getAllEmployees,
-  getEmployeeById,
-  createEmployee,
-  updateEmployee,
-  deleteEmployee,
 };

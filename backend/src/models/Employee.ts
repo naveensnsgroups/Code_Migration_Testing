@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose, { Schema, InferSchemaType } from 'mongoose';
 
-const employeeSchema = new mongoose.Schema(
+const employeeSchema = new Schema(
   {
     fullName: {
       type: String,
@@ -69,5 +69,7 @@ const employeeSchema = new mongoose.Schema(
   }
 );
 
+export type EmployeeDocument = InferSchemaType<typeof employeeSchema>;
+
 // Third argument explicitly sets the MongoDB collection name to 'HR'
-module.exports = mongoose.model('Employee', employeeSchema, 'HR');
+export default mongoose.model('Employee', employeeSchema, 'HR');
