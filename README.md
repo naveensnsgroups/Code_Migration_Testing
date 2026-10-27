@@ -11,6 +11,7 @@ Developed for **SNS IHUB**.
 - [Live Deployment Links](#-live-deployment-links)
 - [Architecture & System Flow](#-architecture--system-flow)
 - [Key Features](#-key-features)
+- [How to Run Locally](#-how-to-run-locally)
 - [Real-Time Input Transformations & UX](#-real-time-input-transformations--ux)
 - [Dual-Layer Zod Validation Schema](#-dual-layer-zod-validation-schema)
 - [PII Data Protection & Encryption Standards](#-pii-data-protection--encryption-standards)
@@ -282,6 +283,43 @@ Mernstack_Project_Trail/
         └── utils/
             └── employeeSchema.js   # Frontend Zod validation helper
 ```
+
+---
+
+## 💻 How to Run Locally
+
+To run this project locally on your machine, follow these quick steps:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/naveensnsgroups/Code_Migration_Testing.git
+   cd Code_Migration_Testing
+   ```
+
+2. **Configure the Environment**:
+   Create a `.env` file inside the `backend/` directory with your MongoDB connection string and server port:
+   ```env
+   MONGO_URI=your_mongodb_atlas_connection_string
+   PORT=5000
+   NODE_ENV=development
+   CLIENT_URL=http://localhost:5173
+   ```
+
+3. **Run the Backend**:
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+   ```
+
+4. **Run the Frontend** (in a separate terminal):
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+
+Open `http://localhost:5173` in your browser to access the application.
 
 ---
 
