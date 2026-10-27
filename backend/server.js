@@ -1,3 +1,8 @@
+/**
+ * Main backend entry point for the Enterprise HR Personal Details System.
+ * Sets up the Express server, security middlewares, database connection, and API routes.
+ */
+
 const express    = require('express');
 const cors       = require('cors');
 const helmet     = require('helmet');
