@@ -244,7 +244,7 @@ Validation is performed on **both client (React)** and **server (Express Middlew
 ## 📁 Directory Structure
 
 ```
-Mernstack_Project_Trail/
+MERNStack_Project_Trail/
 ├── backend/
 │   ├── config/
 │   │   └── db.js                   # MongoDB Atlas connection setup
