@@ -4,7 +4,9 @@ const helmet     = require('helmet');
 const rateLimit  = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const dotenv     = require('dotenv');
+const swaggerUi = require('swagger-ui-express');
 const connectDB  = require('./config/db');
+const swaggerDocument = require('./docs/swagger');
 
 // Load env vars before anything else
 dotenv.config();
@@ -13,6 +15,15 @@ dotenv.config();
 connectDB();
 
 const app = express();
+
+// ─── API Documentation (Swagger UI) ──────────────────────────────────────────
+// Mounted before the global helmet CSP so Swagger UI's inline scripts/styles load
+app.use(
+  '/api-docs',
+  helmet({ contentSecurityPolicy: false }),
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, { customSiteTitle: 'Personal Details API Docs' })
+);
 
 // ─── Security Middleware ──────────────────────────────────────────────────────
 
