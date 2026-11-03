@@ -88,6 +88,10 @@ It features a **pure white design system**, **sharp-cornered black action contro
   - **Delete**: Double-confirmation deletion modal with auto-focused cancel safety button.
 - **Interactive Department Analytics**:
   - Live counters for Total Employees, IT Department, HR Department, and Other Departments (clean, soft-bordered UI).
+- **LangChain AI Support Assistant**:
+  - Integrated floating chat widget powered by LangChain and Google Gemini (`gemini-3.5-flash-lite`).
+  - Real-time RAG context retrieval directly from MongoDB Atlas employee records.
+  - Robust error handling and extended 60-second request timeout for stable AI responses.
 - **Accessibility & UX**:
   - ARIA attributes (`aria-label`, `aria-modal`, `role="dialog"`).
   - Modal keyboard listeners (`Escape` key closes modals).

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AddEmployeePage from './pages/AddEmployeePage';
 import EmployeeRecordsPage from './pages/EmployeeRecordsPage';
+import ChatbotWidget from './components/ChatbotWidget';
 
 /**
  * App.jsx — Multi-page client-side router
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/" element={<AddEmployeePage />} />
         <Route path="/records" element={<EmployeeRecordsPage />} />
       </Routes>
+      <ChatbotWidget />
     </BrowserRouter>
   );
 }
