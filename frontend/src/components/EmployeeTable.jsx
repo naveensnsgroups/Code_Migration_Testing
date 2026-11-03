@@ -1,4 +1,6 @@
-import { Pencil, Trash2, Users, Loader2 } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { Pencil, Trash2, Users, Loader2, Search } from 'lucide-react';
+import useDebounce from '../hooks/useDebounce';
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '—';
@@ -6,6 +8,18 @@ const formatDate = (dateStr) => {
 };
 
 export default function EmployeeTable({ employees, loading, onEdit, onDelete }) {
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
+  const term = debouncedSearch.trim().toLowerCase();
+
+  const visibleEmployees = useMemo(() => {
+    if (!term) return employees;
+    return employees.filter((emp) =>
+      [emp.fullName, emp.employeeId, emp.email, emp.department, emp.position]
+        .some((field) => String(field ?? '').toLowerCase().includes(term))
+    );
+  }, [employees, term]);
+
   if (loading) {
     return (
       <div className="bg-white border border-gray-200 p-20 flex flex-col items-center gap-3">
@@ -30,13 +44,25 @@ export default function EmployeeTable({ employees, loading, onEdit, onDelete }) 
   return (
     <div className="bg-white border border-gray-200">
       {/* Table Header Bar */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 bg-gray-50">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-6 py-4 border-b border-gray-200 bg-gray-50">
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4 text-gray-500" />
           <span className="text-sm font-bold text-gray-900">Employee Records</span>
           <span className="text-xs text-gray-400 ml-1">
-            ({employees.length} record{employees.length !== 1 ? 's' : ''})
+            ({visibleEmployees.length}{term ? ` of ${employees.length}` : ''} record{visibleEmployees.length !== 1 ? 's' : ''})
           </span>
+        </div>
+
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" />
+          <input
+            type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search name, ID, email…"
+            aria-label="Search employee records"
+            className="pl-8 pr-3 py-1.5 w-64 border border-gray-300 text-sm bg-white focus:outline-none focus:border-gray-900"
+          />
         </div>
       </div>
 
@@ -53,7 +79,14 @@ export default function EmployeeTable({ employees, loading, onEdit, onDelete }) 
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {employees.map((emp, index) => (
+            {visibleEmployees.length === 0 && (
+              <tr>
+                <td colSpan={10} className="px-4 py-10 text-center text-sm text-gray-400">
+                  No employees match &ldquo;{debouncedSearch.trim()}&rdquo;.
+                </td>
+              </tr>
+            )}
+            {visibleEmployees.map((emp, index) => (
               <tr key={emp._id} className="hover:bg-gray-50 transition-colors">
                 {/* Index */}
                 <td className="px-4 py-3.5 text-sm text-gray-400">{index + 1}</td>
