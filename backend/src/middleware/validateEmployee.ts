@@ -1,6 +1,7 @@
-const { z } = require('zod');
+import { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
 
-const employeeZodSchema = z.object({
+export const employeeZodSchema = z.object({
   fullName: z
     .string({ required_error: 'Full name is required' })
     .trim()
@@ -38,19 +39,20 @@ const employeeZodSchema = z.object({
 /**
  * Express middleware to validate request body using Zod schema
  */
-const validateEmployeeWithZod = (req, res, next) => {
+const validateEmployeeWithZod = (req: Request, res: Response, next: NextFunction): void => {
   const result = employeeZodSchema.safeParse(req.body);
   if (!result.success) {
     const errorMessages = result.error.issues.map((issue) => issue.message);
-    return res.status(400).json({
+    res.status(400).json({
       success: false,
       message: errorMessages.join(', '),
       errors: result.error.format(),
     });
+    return;
   }
   // Replace req.body with sanitized & type-safe Zod data
   req.body = result.data;
   next();
 };
 
-module.exports = validateEmployeeWithZod;
+export default validateEmployeeWithZod;
