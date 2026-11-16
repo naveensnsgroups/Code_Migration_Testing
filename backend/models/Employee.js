@@ -1,3 +1,12 @@
+/**
+ * Employee model (Mongoose).
+ *
+ * Defines the schema for employee records: name, employee ID, company email,
+ * phone, date of birth, gender, address, department, position and join date.
+ * It enforces the validation rules (required fields, formats, length limits,
+ * allowed gender and department values) and adds createdAt/updatedAt timestamps.
+ * Records are stored in the MongoDB 'HR' collection.
+ */
 const mongoose = require('mongoose');
 
 const employeeSchema = new mongoose.Schema(
